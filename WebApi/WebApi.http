@@ -1,0 +1,384 @@
+###
+# Variables para el entorno
+@host = http://localhost:5227
+@contentType = application/json
+
+###
+# 1. GET - Obtener todos los artículos (lista vacía inicialmente)
+GET {{host}}/api/articles
+Accept: {{contentType}}
+
+###
+# 2. POST - Crear artículo válido #1
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Laptop Gaming",
+    "price": 1500.99,
+    "description": "Laptop para gaming de alta gama con RTX 4070"
+}
+
+###
+# 3. POST - Crear artículo válido #2
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Mouse Inalámbrico",
+    "price": 45.50,
+    "description": "Mouse inalámbrico ergonómico con sensor óptico"
+}
+
+###
+# 4. GET - Obtener todos los artículos (ahora con datos)
+GET {{host}}/api/articles
+Accept: {{contentType}}
+
+###
+# 5. GET - Obtener artículo por ID válido (usar ID=1)
+GET {{host}}/api/articles/1
+Accept: {{contentType}}
+
+###
+# 6. GET - Obtener artículo por ID inválido (no existe)
+GET {{host}}/api/articles/999
+Accept: {{contentType}}
+
+###
+# ========== VALIDACIONES DE CREACIÓN - CASOS DE ERROR ==========
+
+###
+# 7. POST - Error: Nombre vacío
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "",
+    "price": 100.00,
+    "description": "Descripción válida"
+}
+
+###
+# 8. POST - Error: Nombre null
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": null,
+    "price": 100.00,
+    "description": "Descripción válida"
+}
+
+###
+# 9. POST - Error: Nombre demasiado largo (>100 caracteres)
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Este nombre es extremadamente largo y excede el límite de 100 caracteres permitidos para validar que la regla de negocio funciona correctamente",
+    "price": 100.00,
+    "description": "Descripción válida"
+}
+
+###
+# 10. POST - Error: Precio cero
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Precio Cero",
+    "price": 0,
+    "description": "Descripción válida"
+}
+
+###
+# 11. POST - Error: Precio negativo
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Precio Negativo",
+    "price": -50.00,
+    "description": "Descripción válida"
+}
+
+###
+# 12. POST - Error: Descripción vacía
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Sin Descripción",
+    "price": 100.00,
+    "description": ""
+}
+
+###
+# 13. POST - Error: Descripción null
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Descripción Null",
+    "price": 100.00,
+    "description": null
+}
+
+###
+# 14. POST - Error: Descripción demasiado larga (>500 caracteres)
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Descripción Larga",
+    "price": 100.00,
+    "description": "Esta descripción es extremadamente larga y está diseñada para exceder el límite de 500 caracteres establecido en las reglas de negocio. Vamos a agregar más texto para asegurarnos de que realmente supere los 500 caracteres permitidos. Esta validación debe fallar y devolver un error Bad Request indicando que la descripción no puede exceder los 500 caracteres. Continuamos agregando más texto para garantizar que se alcance el límite: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+}
+
+###
+# 15. POST - Error: Nombre duplicado (intentar crear otro "Laptop Gaming")
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Laptop Gaming",
+    "price": 2000.00,
+    "description": "Otra laptop gaming diferente pero con el mismo nombre"
+}
+
+###
+# 16. POST - Error: JSON malformado
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo JSON Malo",
+    "price": 100.00,
+    "description": Descripción válida
+    // Este comentario hace que el JSON sea inválido
+}
+###
+# 17. POST - Error: Campos faltantes
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Solo Nombre"
+}
+
+###
+# ========== VALIDACIONES DE ACTUALIZACIÓN - CASOS DE ERROR ==========
+
+###
+# 18. PUT - Actualización válida (actualizar artículo ID=1)
+PUT {{host}}/api/articles/1
+Content-Type: {{contentType}}
+
+{
+    "name": "Laptop Gaming Actualizada",
+    "price": 1699.99,
+    "description": "Laptop gaming actualizada con mejor precio y características mejoradas"
+}
+
+###
+# 19. PUT - Error: Actualizar artículo inexistente
+PUT {{host}}/api/articles/999
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Inexistente",
+    "price": 100.00,
+    "description": "Intentando actualizar artículo que no existe"
+}
+
+###
+# 20. PUT - Error: Actualizar con nombre duplicado de otro artículo
+PUT {{host}}/api/articles/1
+Content-Type: {{contentType}}
+
+{
+    "name": "Mouse Inalámbrico",
+    "price": 1500.00,
+    "description": "Intentando usar el nombre de otro artículo existente"
+}
+
+###
+# 21. PUT - Error: Actualizar con precio negativo
+PUT {{host}}/api/articles/1
+Content-Type: {{contentType}}
+
+{
+    "name": "Laptop Con Precio Negativo",
+    "price": -100.00,
+    "description": "Intentando actualizar con precio inválido"
+}
+
+###
+# 22. PUT - Error: Actualizar con nombre vacío
+PUT {{host}}/api/articles/1
+Content-Type: {{contentType}}
+
+{
+    "name": "",
+    "price": 1500.00,
+    "description": "Intentando actualizar con nombre vacío"
+}
+
+###
+# 23. PUT - Actualización válida manteniendo el mismo nombre
+PUT {{host}}/api/articles/1
+Content-Type: {{contentType}}
+
+{
+    "name": "Laptop Gaming Actualizada",
+    "price": 1399.99,
+    "description": "Solo cambiando precio y descripción, manteniendo el mismo nombre"
+}
+
+###
+# ========== PRUEBAS DE ELIMINACIÓN ==========
+
+###
+# 24. POST - Crear artículo para eliminar
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo Para Eliminar",
+    "price": 50.00,
+    "description": "Este artículo será eliminado en la siguiente prueba"
+}
+
+###
+# 25. DELETE - Eliminar artículo válido (usar el ID del artículo recién creado)
+DELETE {{host}}/api/articles/3
+
+###
+# 26. DELETE - Error: Eliminar artículo inexistente
+DELETE {{host}}/api/articles/999
+
+###
+# 27. GET - Verificar que el artículo eliminado ya no existe
+GET {{host}}/api/articles/3
+Accept: {{contentType}}
+
+###
+# ========== CASOS EDGE Y LÍMITES ==========
+
+###
+# 28. POST - Nombre en el límite exacto (100 caracteres)
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+    "price": 100.00,
+    "description": "Nombre con exactamente 100 caracteres"
+}
+
+###
+# 29. POST - Descripción en el límite exacto (500 caracteres)
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Descripción Límite",
+    "price": 100.00,
+    "description": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678"
+}
+
+###
+# 30. POST - Precio con muchos decimales
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Precio Decimales",
+    "price": 99.999999,
+    "description": "Probando precio con muchos decimales"
+}
+
+###
+# 31. POST - Caracteres especiales en nombre y descripción
+POST {{host}}/api/articles
+Content-Type: {{contentType}}
+
+{
+    "name": "Artículo-Especial_123 & más!",
+    "price": 150.75,
+    "description": "Descripción con caracteres especiales: áéíóú ñÑ @#$%^&*()_+ 🚀"
+}
+
+###
+# ========== VERIFICACIONES FINALES ==========
+
+###
+# 32. GET - Obtener todos los artículos finales
+GET {{host}}/api/articles
+Accept: {{contentType}}
+
+###
+# 33. GET - Verificar artículo específico actualizado
+GET {{host}}/api/articles/1
+Accept: {{contentType}}
+
+###
+# ========== PRUEBAS DE HEADERS Y CONTENT TYPES ==========
+
+###
+# 34. POST - Sin Content-Type header (debería fallar)
+POST {{host}}/api/articles
+
+{
+    "name": "Sin Content Type",
+    "price": 100.00,
+    "description": "Enviado sin Content-Type header"
+}
+
+###
+# 35. POST - Content-Type incorrecto
+POST {{host}}/api/articles
+Content-Type: text/plain
+
+{
+    "name": "Content Type Incorrecto",
+    "price": 100.00,
+    "description": "Enviado con Content-Type incorrecto"
+}
+
+###
+# 36. GET - Con Accept header específico
+GET {{host}}/api/articles
+Accept: application/json
+User-Agent: HTTP-Test-Client
+
+
+###
+# ========== RESUMEN DE CASOS DE PRUEBA ==========
+
+###
+# CASOS CUBIERTOS:
+# ✅ CRUD básico (Create, Read, Update, Delete)
+# ✅ Validación de nombre requerido y único
+# ✅ Validación de precio positivo (>0)
+# ✅ Validación de descripción requerida
+# ✅ Límites de caracteres (nombre 100, descripción 500)
+# ✅ Artículos inexistentes (404)
+# ✅ Nombres duplicados (409 Conflict)
+# ✅ JSON malformado
+# ✅ Campos faltantes
+# ✅ Headers incorrectos
+# ✅ Casos límite y edge cases
+# ✅ Caracteres especiales
+# ✅ Verificaciones finales
+
+###
+# CÓDIGOS HTTP ESPERADOS:
+# 200 OK - Operaciones exitosas
+# 201 Created - Creación exitosa
+# 204 No Content - Eliminación exitosa
+# 400 Bad Request - Errores de validación
+# 404 Not Found - Recursos no encontrados
+# 409 Conflict - Nombres duplicados
+# 500 Internal Server Error - Errores del servidor
