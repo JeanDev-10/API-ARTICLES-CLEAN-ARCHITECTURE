@@ -13,4 +13,13 @@ public class DomainException : Exception
     {
         public DuplicateArticleNameException(string name) : base($"Ya existe un artículo con el nombre '{name}'") { }
     }
+    public class CategoryNotFoundException : DomainException
+    {
+        public CategoryNotFoundException(int id) : base($"Categoría con ID {id} no encontrado") { }
+    }
+
+    public class DuplicateCategoryNameException : DomainException
+    {
+        public DuplicateCategoryNameException(string name) : base($"Ya existe una categoría con el nombre '{name}'") { }
+    }
 }

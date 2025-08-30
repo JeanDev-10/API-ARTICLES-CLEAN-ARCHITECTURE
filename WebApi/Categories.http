@@ -1,0 +1,100 @@
+###
+# Variables para el entorno
+@host = http://localhost:5227
+@contentType = application/json
+
+###
+# 1. GET - Obtener todas las categorías (lista vacía inicialmente)
+GET {{host}}/api/categories
+Accept: {{contentType}}
+
+###
+# 2. POST - Crear categoría válida #1
+POST {{host}}/api/categories
+Content-Type: {{contentType}}
+
+{
+    "name": "Electrónicos"
+}
+
+###
+# 3. POST - Crear categoría válida #2
+POST {{host}}/api/categories
+Content-Type: {{contentType}}
+
+{
+    "name": "Hogar y Jardín"
+}
+
+###
+# 4. GET - Obtener todas las categorías (ahora con datos)
+GET {{host}}/api/categories
+Accept: {{contentType}}
+
+###
+# 5. GET - Obtener categoría por ID válido
+GET {{host}}/api/categories/1
+Accept: {{contentType}}
+
+###
+# 6. GET - Error: Categoría por ID inválido
+GET {{host}}/api/categories/999
+Accept: {{contentType}}
+
+###
+# 7. POST - Error: Nombre vacío
+POST {{host}}/api/categories
+Content-Type: {{contentType}}
+
+{
+    "name": " "
+}
+
+###
+# 8. POST - Error: Nombre demasiado largo (>100 caracteres)
+POST {{host}}/api/categories
+Content-Type: {{contentType}}
+
+{
+    "name": "Esta categoría tiene un nombre extremadamente largo que excede el límite de 100 caracteres permitidos para validar que la regla funciona correctamente"
+}
+
+###
+# 9. POST - Error: Nombre duplicado
+POST {{host}}/api/categories
+Content-Type: {{contentType}}
+
+{
+    "name": "Electrónicos"
+}
+
+###
+# 10. PUT - Actualización válida
+PUT {{host}}/api/categories/1
+Content-Type: {{contentType}}
+
+{
+    "name": "Tecnología y Electrónicos"
+}
+
+###
+# 11. PUT - Error: Actualizar con nombre de otra categoría
+PUT {{host}}/api/categories/1
+Content-Type: {{contentType}}
+
+{
+    "name": "Hogar y Jardín"
+}
+
+###
+# 12. DELETE - Eliminar categoría válida
+DELETE {{host}}/api/categories/2
+
+###
+# 13. DELETE - Error: Eliminar categoría inexistente
+DELETE {{host}}/api/categories/999
+
+###
+# 14. GET - Verificar categorías finales
+GET {{host}}/api/categories
+Accept: {{contentType}}

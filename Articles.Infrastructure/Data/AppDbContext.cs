@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
       public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
       public DbSet<Article> Articles { get; set; }
+      public DbSet<Category> Categories { get; set; }
       protected override void OnModelCreating(ModelBuilder modelBuilder)
       {
             // Configuración de Article
@@ -40,7 +41,25 @@ public class AppDbContext : DbContext
                   // Índice único para el nombre
                   entity.HasIndex(e => e.Name).IsUnique();
             });
+            // Configuración de Category
+            modelBuilder.Entity<Category>(entity =>
+            {
+                  entity.HasKey(e => e.Id);
 
+                  entity.Property(e => e.Name)
+                        .IsRequired()
+                        .HasConversion(CategoryConverters.NameConverter)
+                        .HasMaxLength(100);
+
+                  entity.Property(e => e.CreatedAt)
+                        .IsRequired();
+
+                  entity.Property(e => e.UpdatedAt)
+                        .IsRequired();
+
+                  // Índice único para el nombre
+                  entity.HasIndex(e => e.Name).IsUnique();
+            });
             base.OnModelCreating(modelBuilder);
       }
 }

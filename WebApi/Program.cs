@@ -1,6 +1,8 @@
 using Articles.Application.Interfaces;
 using Articles.Application.Services;
 using Articles.Application.Validators.Articles;
+using Articles.Application.Validators.Categories;
+using Articles.Domain.Entities;
 using Articles.Infrastructure.Data;
 using Articles.Infrastructure.Repositories;
 using FluentValidation;
@@ -26,7 +28,9 @@ options.UseSqlServer(
 builder.Services.AddValidatorsFromAssemblyContaining<CreateArticleDtoValidator>();
 // Services
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

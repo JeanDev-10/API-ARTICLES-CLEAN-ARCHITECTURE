@@ -4,7 +4,7 @@ Una Web API construida con **ASP.NET Core 8.0** siguiendo los principios de **Cl
 
 ## ✨ Características
 
-- ✅ **CRUD Completo** de Artículos (Crear, Leer, Actualizar, Eliminar)
+- ✅ **CRUD Completo** de Artículos y Categorías (Crear, Leer, Actualizar, Eliminar)
 - ✅ **Clean Architecture** con separación clara de responsabilidades
 - ✅ **Validaciones robustas** con FluentValidation
 - ✅ **Reglas de negocio** encapsuladas en el Domain
@@ -59,29 +59,33 @@ Este proyecto implementa **Clean Architecture** de Uncle Bob con 4 capas princip
 ## 🛠️ Tecnologías y Herramientas
 
 ### Framework y Runtime
+
 - **.NET 8.0** - Framework principal
 - **ASP.NET Core 8.0** - Web API framework
 
 ### Base de Datos y ORM
+
 - **Entity Framework Core 8.0.19** - ORM principal
 - **Microsoft.EntityFrameworkCore.SqlServer 8.0.19** - Provider para SQL Server
 - **Microsoft.EntityFrameworkCore.Design 8.0.19** - Herramientas de diseño
 - **Microsoft.EntityFrameworkCore.Tools 8.0.19** - Herramientas CLI
 
 ### Validaciones
+
 - **FluentValidation 12.0.0** - Validaciones robustas y expresivas
 - **FluentValidation.AspNetCore 11.3.1** - Integración con ASP.NET Core
 - **FluentValidation.DependencyInjectionExtensions 12.0.0** - Inyección de dependencias
 
 ### Documentación y Testing
+
 - **Swashbuckle.AspNetCore 6.6.2** - Swagger/OpenAPI documentation
 
 ### Herramientas de Desarrollo
+
 - **Visual Studio / VS Code** - IDEs recomendados
 - **REST Client** - Para pruebas de API (archivo .http)
 - **SQL Server Management Studio** - Gestión de base de datos
 - **dotnet CLI** - Herramientas de línea de comandos
-
 
 ## 🚀 Instalación y Configuración
 
@@ -94,17 +98,20 @@ Este proyecto implementa **Clean Architecture** de Uncle Bob con 4 capas princip
 ### Pasos de Instalación
 
 1. **Clonar el repositorio**
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/JeanDev-10/API-ARTICLES-CLEAN-ARCHITECTURE
 cd ArticlesCleanArchitecture
 ```
 
 2. **Restaurar dependencias**
+
 ```bash
 dotnet restore
 ```
 
 3. **Configurar la base de datos**
+
 ```bash
 # Actualizar connection string en WebApi/appsettings.json
 {
@@ -115,6 +122,7 @@ dotnet restore
 ```
 
 4. **Crear y aplicar migraciones**
+
 ```bash
 
 
@@ -123,11 +131,13 @@ dotnet ef database update --project Articles.Infrastructure --startup-project We
 ```
 
 5. **Ejecutar la aplicación**
+
 ```bash
 dotnet run --project WebApi
 ```
 
 6. **Acceder a la documentación**
+
 - Swagger UI: `https://localhost:5227/swagger`
 - API Base URL: `https://localhost:5227/api`
 
@@ -135,17 +145,18 @@ dotnet run --project WebApi
 
 ### Endpoints Disponibles
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/articles` | Obtener todos los artículos |
-| GET | `/api/articles/{id}` | Obtener artículo por ID |
-| POST | `/api/articles` | Crear nuevo artículo |
-| PUT | `/api/articles/{id}` | Actualizar artículo existente |
-| DELETE | `/api/articles/{id}` | Eliminar artículo |
+| Método | Endpoint             | Descripción                   |
+| ------ | -------------------- | ----------------------------- |
+| GET    | `/api/articles`      | Obtener todos los artículos   |
+| GET    | `/api/articles/{id}` | Obtener artículo por ID       |
+| POST   | `/api/articles`      | Crear nuevo artículo          |
+| PUT    | `/api/articles/{id}` | Actualizar artículo existente |
+| DELETE | `/api/articles/{id}` | Eliminar artículo             |
 
 ### Ejemplo de Uso
 
 #### Crear un Artículo
+
 ```http
 POST https://localhost:5001/api/articles
 Content-Type: application/json
@@ -158,18 +169,20 @@ Content-Type: application/json
 ```
 
 #### Respuesta Exitosa (201 Created)
+
 ```json
 {
-    "id": 1,
-    "name": "Laptop Gaming",
-    "price": 1500.99,
-    "description": "Laptop para gaming de alta gama con RTX 4070",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "updatedAt": "2024-01-15T10:30:00Z"
+  "id": 1,
+  "name": "Laptop Gaming",
+  "price": 1500.99,
+  "description": "Laptop para gaming de alta gama con RTX 4070",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z"
 }
 ```
 
 #### Actualizar un Artículo
+
 ```http
 PUT https://localhost:5001/api/articles/1
 Content-Type: application/json
@@ -186,6 +199,7 @@ Content-Type: application/json
 ### Validaciones Implementadas
 
 #### Nombre del Artículo
+
 - ✅ **Requerido**: No puede estar vacío
 - ✅ **Longitud**: Entre 3 y 100 caracteres
 - ✅ **Único**: No se pueden repetir nombres
@@ -193,12 +207,14 @@ Content-Type: application/json
 - ✅ **Contenido apropiado**: Sin palabras inapropiadas
 
 #### Precio
+
 - ✅ **Positivo**: Debe ser mayor a 0
 - ✅ **Máximo**: No puede exceder $999,999.99
 - ✅ **Decimales**: Máximo 2 decimales
 - ✅ **Consistencia**: Debe ser consistente con el tipo de producto
 
 #### Descripción
+
 - ✅ **Requerida**: No puede estar vacía
 - ✅ **Longitud**: Entre 10 y 500 caracteres
 - ✅ **Específica**: No debe ser genérica o muy básica
@@ -217,12 +233,12 @@ Content-Type: application/json
 
 ```json
 {
-    "message": "Errores de validación",
-    "errors": [
-        "El nombre del artículo es requerido",
-        "El precio debe ser mayor a 0",
-        "La descripción debe tener entre 10 y 500 caracteres"
-    ]
+  "message": "Errores de validación",
+  "errors": [
+    "El nombre del artículo es requerido",
+    "El precio debe ser mayor a 0",
+    "La descripción debe tener entre 10 y 500 caracteres"
+  ]
 }
 ```
 
@@ -240,6 +256,7 @@ El proyecto incluye un archivo `WebApi.http` con casos de prueba que cubren:
 #### Ejecutar Pruebas
 
 1. **Con Visual Studio Code**:
+
    - Instalar extensión "REST Client"
    - Abrir `articles-api-tests.http`
    - Hacer clic en "Send Request" sobre cada prueba
@@ -249,7 +266,30 @@ El proyecto incluye un archivo `WebApi.http` con casos de prueba que cubren:
    - **Insomnia**: Usar las requests HTTP
    - **curl**: Convertir a comandos curl
 
+## 🔧 Uso de la API
+
+### Endpoints Disponibles
+
+| Método | Endpoint             | Descripción                   |
+| ------ | -------------------- | ----------------------------- |
+| GET    | `/api/articles`      | Obtener todos los artículos   |
+| GET    | `/api/articles/{id}` | Obtener artículo por ID       |
+| POST   | `/api/articles`      | Crear nuevo artículo          |
+| PUT    | `/api/articles/{id}` | Actualizar artículo existente |
+| DELETE | `/api/articles/{id}` | Eliminar artículo             |
+
+#### Categorías
+
+| Método | Endpoint               | Descripción                    |
+| ------ | ---------------------- | ------------------------------ |
+| GET    | `/api/categories`      | Obtener todas las categorías   |
+| GET    | `/api/categories/{id}` | Obtener categoría por ID       |
+| POST   | `/api/categories`      | Crear nueva categoría          |
+| PUT    | `/api/categories/{id}` | Actualizar categoría existente |
+| DELETE | `/api/categories/{id}` | Eliminar categoría             |
+
 ---
+
 ## Autor
 
 - [Jean Pierre Rodríguez Zambrano](https://github.com/JeanDev-10)
