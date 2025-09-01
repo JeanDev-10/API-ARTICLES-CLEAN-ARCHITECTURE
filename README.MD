@@ -14,15 +14,28 @@ Una Web API construida con **ASP.NET Core 8.0** siguiendo los principios de **Cl
 - ✅ **Inyección de dependencias** configurada correctamente
 - ✅ **Repository Pattern** para acceso a datos
 - ✅ **DTOs** para transferencia de datos
+- ✅ **Relación 1:N** - Una categoría puede tener muchos artículos
 
 ### Reglas de Negocio Implementadas
 
 - **Nombre único**: No se pueden repetir nombres de artículos
 - **Precio positivo**: El precio debe ser mayor a 0
-- **Validaciones de longitud**: Nombre (3-100 chars), Descripción (10-500 chars)
+- **Validaciones de longitud**: Nombre (1-100 chars), Descripción (1-500 chars)
 - **Validaciones personalizadas**: Caracteres permitidos, detección de contenido inapropiado
 - **Validaciones condicionales**: Precios consistentes con el tipo de producto
 
+**Categorías**
+
+- **Nombre único:** No se pueden repetir nombres de categorías
+- **Validaciones de longitud**: Nombre (1-100 caracteres)
+- **Nombre requerido:** El nombre no puede estar vacío
+- **Protección de integridad**: No se puede eliminar una categoría que tiene artículos asociados
+
+**Relaciones**
+
+- Uno a muchos: Una categoría puede tener múltiples artículos
+- Integridad referencial: Los artículos deben tener una categoría válida
+- Eliminación restringida: Previene eliminaciones que rompan la consistencia
 ## 🏗️ Arquitectura
 
 Este proyecto implementa **Clean Architecture** de Uncle Bob con 4 capas principales:
@@ -164,7 +177,8 @@ Content-Type: application/json
 {
     "name": "Laptop Gaming",
     "price": 1500.99,
-    "description": "Laptop para gaming de alta gama con RTX 4070"
+    "description": "Laptop para gaming de alta gama con RTX 4070",
+    "categoryId":1
 }
 ```
 
@@ -190,7 +204,8 @@ Content-Type: application/json
 {
     "name": "Laptop Gaming Pro",
     "price": 1699.99,
-    "description": "Laptop gaming profesional con RTX 4070 y 32GB RAM"
+    "description": "Laptop gaming profesional con RTX 4070 y 32GB RAM",
+    "categoryId":2
 }
 ```
 

@@ -47,7 +47,7 @@ POST {{host}}/api/categories
 Content-Type: {{contentType}}
 
 {
-    "name": " "
+    "name": ""
 }
 
 ###
@@ -95,6 +95,10 @@ DELETE {{host}}/api/categories/2
 DELETE {{host}}/api/categories/999
 
 ###
-# 14. GET - Verificar categorías finales
+# 14. DELETE - Error: Eliminar categoría con articulos registrados
+DELETE {{host}}/api/categories/1
+
+###
+# 15. GET - Verificar categorías finales
 GET {{host}}/api/categories
 Accept: {{contentType}}

@@ -16,7 +16,8 @@ Content-Type: {{contentType}}
 {
     "name": "Laptop Gaming",
     "price": 1500.99,
-    "description": "Laptop para gaming de alta gama con RTX 4070"
+    "description": "Laptop para gaming de alta gama con RTX 4070",
+    "categoryId": 1
 }
 
 ###
@@ -27,7 +28,8 @@ Content-Type: {{contentType}}
 {
     "name": "Mouse Inalámbrico",
     "price": 45.50,
-    "description": "Mouse inalámbrico ergonómico con sensor óptico"
+    "description": "Mouse inalámbrico ergonómico con sensor óptico",
+    "categoryId": 1
 }
 
 ###
@@ -144,7 +146,8 @@ Content-Type: {{contentType}}
 {
     "name": "Laptop Gaming",
     "price": 2000.00,
-    "description": "Otra laptop gaming diferente pero con el mismo nombre"
+    "description": "Otra laptop gaming diferente pero con el mismo nombre",
+    "categoryId":1
 }
 
 ###
@@ -178,7 +181,8 @@ Content-Type: {{contentType}}
 {
     "name": "Laptop Gaming Actualizada",
     "price": 1699.99,
-    "description": "Laptop gaming actualizada con mejor precio y características mejoradas"
+    "description": "Laptop gaming actualizada con mejor precio y características mejoradas",
+    "categoryId":1
 }
 
 ###
@@ -189,7 +193,8 @@ Content-Type: {{contentType}}
 {
     "name": "Artículo Inexistente",
     "price": 100.00,
-    "description": "Intentando actualizar artículo que no existe"
+    "description": "Intentando actualizar artículo que no existe",
+    "categoryId":1
 }
 
 ###
@@ -200,7 +205,8 @@ Content-Type: {{contentType}}
 {
     "name": "Mouse Inalámbrico",
     "price": 1500.00,
-    "description": "Intentando usar el nombre de otro artículo existente"
+    "description": "Intentando usar el nombre de otro artículo existente",
+    "categoryId":1
 }
 
 ###
@@ -211,7 +217,8 @@ Content-Type: {{contentType}}
 {
     "name": "Laptop Con Precio Negativo",
     "price": -100.00,
-    "description": "Intentando actualizar con precio inválido"
+    "description": "Intentando actualizar con precio inválido",
+    "categoryId":1
 }
 
 ###
@@ -222,7 +229,8 @@ Content-Type: {{contentType}}
 {
     "name": "",
     "price": 1500.00,
-    "description": "Intentando actualizar con nombre vacío"
+    "description": "Intentando actualizar con nombre vacío",
+    "categoryId":1
 }
 
 ###
@@ -233,7 +241,8 @@ Content-Type: {{contentType}}
 {
     "name": "Laptop Gaming Actualizada",
     "price": 1399.99,
-    "description": "Solo cambiando precio y descripción, manteniendo el mismo nombre"
+    "description": "Solo cambiando precio y descripción, manteniendo el mismo nombre",
+    "categoryId":1
 }
 
 ###
@@ -247,7 +256,8 @@ Content-Type: {{contentType}}
 {
     "name": "Artículo Para Eliminar",
     "price": 50.00,
-    "description": "Este artículo será eliminado en la siguiente prueba"
+    "description": "Este artículo será eliminado en la siguiente prueba",
+    "categoryId":2
 }
 
 ###
@@ -274,7 +284,8 @@ Content-Type: {{contentType}}
 {
     "name": "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
     "price": 100.00,
-    "description": "Nombre con exactamente 100 caracteres"
+    "description": "Nombre con exactamente 100 caracteres",
+    "categoryId":1
 }
 
 ###
@@ -285,7 +296,8 @@ Content-Type: {{contentType}}
 {
     "name": "Descripción Límite",
     "price": 100.00,
-    "description": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678"
+    "description": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678",
+    "categoryId":1
 }
 
 ###
@@ -296,7 +308,8 @@ Content-Type: {{contentType}}
 {
     "name": "Precio Decimales",
     "price": 99.999999,
-    "description": "Probando precio con muchos decimales"
+    "description": "Probando precio con muchos decimales",
+    "categoryId":1
 }
 
 ###
@@ -307,7 +320,8 @@ Content-Type: {{contentType}}
 {
     "name": "Artículo-Especial_123 & más!",
     "price": 150.75,
-    "description": "Descripción con caracteres especiales: áéíóú ñÑ @#$%^&*()_+ 🚀"
+    "description": "Descripción con caracteres especiales: áéíóú ñÑ @#$%^&*()_+ 🚀",
+    "categoryId":1
 }
 
 ###
@@ -333,7 +347,8 @@ POST {{host}}/api/articles
 {
     "name": "Sin Content Type",
     "price": 100.00,
-    "description": "Enviado sin Content-Type header"
+    "description": "Enviado sin Content-Type header",
+    "categoryId":1
 }
 
 ###
@@ -344,7 +359,8 @@ Content-Type: text/plain
 {
     "name": "Content Type Incorrecto",
     "price": 100.00,
-    "description": "Enviado con Content-Type incorrecto"
+    "description": "Enviado con Content-Type incorrecto",
+    "categoryId":1
 }
 
 ###

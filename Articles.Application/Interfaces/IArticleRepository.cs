@@ -11,4 +11,5 @@ public interface IArticleRepository
     Task<Article> UpdateAsync(Article article);
     Task DeleteAsync(int id);
     Task<bool> ExistsByNameAsync(string name, int excludeId = 0);
+    Task<bool> CategoryExistsAsync(int categoryId);  // Verificar si categoría existe
 }

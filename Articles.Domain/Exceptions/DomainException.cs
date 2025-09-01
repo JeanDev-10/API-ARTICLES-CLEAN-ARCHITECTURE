@@ -22,4 +22,15 @@ public class DomainException : Exception
     {
         public DuplicateCategoryNameException(string name) : base($"Ya existe una categoría con el nombre '{name}'") { }
     }
+     // Nueva excepción para relación
+    public class CategoryHasArticlesException : DomainException
+    {
+        public CategoryHasArticlesException() 
+            : base($"No se puede eliminar la categoría porque tiene artículos asociados") { }
+    }
+
+    public class InvalidCategoryException : DomainException
+    {
+        public InvalidCategoryException(int categoryId) : base($"La categoría con ID {categoryId} no existe") { }
+    }
 }

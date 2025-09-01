@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Articles.Application.DTOs.Category;
 using Articles.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using static Articles.Domain.Exceptions.DomainException;
 
@@ -12,10 +11,14 @@ namespace WebApi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly IValidator<CreateCategoryDto> _createValidator;
+        private readonly IValidator<UpdateCategoryDto> _updateValidator;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, IValidator<CreateCategoryDto> createValidator, IValidator<UpdateCategoryDto> updateValidator)
         {
             _categoryService = categoryService;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAll()
@@ -50,18 +53,20 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryDto dto)
         {
+            // Validar con FluentValidation
+        var validationResult = await _createValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(new
+            {
+                message = "Errores de validación",
+                errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray()
+            });
+        }
             try
             {
                 var category = await _categoryService.CreateAsync(dto);
                 return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new
-                {
-                    message = "Errores de validación",
-                    errors = ex.Message.Split(';').Select(e => e.Trim()).ToArray()
-                });
             }
             catch (DuplicateCategoryNameException ex)
             {
@@ -79,6 +84,16 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CategoryDto>> Update(int id, [FromBody] UpdateCategoryDto dto)
         {
+                // Validar con FluentValidation
+        var validationResult = await _updateValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(new
+            {
+                message = "Errores de validación",
+                errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray()
+            });
+        }
             try
             {
                 var category = await _categoryService.UpdateAsync(id, dto);
@@ -87,14 +102,6 @@ namespace WebApi.Controllers
             catch (CategoryNotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new
-                {
-                    message = "Errores de validación",
-                    errors = ex.Message.Split(';').Select(e => e.Trim()).ToArray()
-                });
             }
             catch (DuplicateCategoryNameException ex)
             {

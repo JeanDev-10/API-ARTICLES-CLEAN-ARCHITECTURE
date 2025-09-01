@@ -56,4 +56,13 @@ public class CategoryRepository : ICategoryRepository
         var nameVo = new CategoryName(name);
         return await _context.Categories.AnyAsync(c => c.Name == nameVo && c.Id != excludeId);
     }
+    public async Task<int> GetArticleCountAsync(int categoryId)
+    {
+        return await _context.Articles.CountAsync(a => a.CategoryId == categoryId);
+    }
+
+    public async Task<bool> HasArticlesAsync(int categoryId)
+    {
+        return await _context.Articles.AnyAsync(a => a.CategoryId == categoryId);
+    }
 }

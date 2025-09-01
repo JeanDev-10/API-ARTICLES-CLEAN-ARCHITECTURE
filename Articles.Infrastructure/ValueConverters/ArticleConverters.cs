@@ -12,6 +12,6 @@ public static class ArticleConverters
     public static readonly ValueConverter<ArticleName, string> NameConverter =
         new(v => v.Value, v => new ArticleName(v));
     public static readonly ValueConverter<ArticleDescription, string> DescriptionConverter =
-       new(v => v.Value,
-       v => new ArticleDescription(v));
+       new(v => v.Value,v => new ArticleDescription(v));
+    
 }

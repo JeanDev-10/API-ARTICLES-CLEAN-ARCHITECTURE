@@ -11,6 +11,7 @@ public class CategoryMapper
         return new CategoryDto(
                  category.Id,
                  category.Name.ToString(),
+                 category.Articles?.Count ?? 0,
                  category.CreatedAt,
                  category.UpdatedAt
              );

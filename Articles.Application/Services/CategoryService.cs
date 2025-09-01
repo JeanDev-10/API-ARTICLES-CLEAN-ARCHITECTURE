@@ -10,17 +10,10 @@ namespace Articles.Application.Services;
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _repository;
-    private readonly IValidator<CreateCategoryDto> _createValidator;
-    private readonly IValidator<UpdateCategoryDto> _updateValidator;
-
     public CategoryService(
-        ICategoryRepository repository,
-        IValidator<CreateCategoryDto> createValidator,
-        IValidator<UpdateCategoryDto> updateValidator)
+        ICategoryRepository repository)
     {
         _repository = repository;
-        _createValidator = createValidator;
-        _updateValidator = updateValidator;
     }
 
     public async Task<CategoryDto> GetByIdAsync(int id)
@@ -38,14 +31,6 @@ public class CategoryService : ICategoryService
     }
     public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
     {
-        // Validar con FluentValidation
-        var validationResult = await _createValidator.ValidateAsync(dto);
-        if (!validationResult.IsValid)
-        {
-            var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
-            throw new ValidationException(errors);
-        }
-
         var category = new Category(dto.Name);
         var createdCategory = await _repository.CreateAsync(category);
 
@@ -56,27 +41,8 @@ public class CategoryService : ICategoryService
         var category = await _repository.GetByIdAsync(id);
         if (category == null)
             throw new CategoryNotFoundException(id);
-
-        // Validar con FluentValidation
-        var validationResult = await _updateValidator.ValidateAsync(dto);
-        if (!validationResult.IsValid)
-        {
-            var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
-            throw new ValidationException(errors);
-        }
-        // Validar nombre único para actualización
-        var validator = _updateValidator as UpdateCategoryDtoValidator;
-        if (validator != null)
-        {
-            var isUniqueForUpdate = await validator.BeUniqueNameForUpdate(dto.Name, id, CancellationToken.None);
-            if (!isUniqueForUpdate)
-            {
-                throw new DuplicateArticleNameException(dto.Name);
-            }
-        }
         category.UpdateName(dto.Name);
         var updatedCategory = await _repository.UpdateAsync(category);
-
         return CategoryMapper.ToDto(updatedCategory);
     }
     public async Task DeleteAsync(int id)
@@ -84,7 +50,9 @@ public class CategoryService : ICategoryService
         var category = await _repository.GetByIdAsync(id);
         if (category == null)
             throw new CategoryNotFoundException(id);
-
+        // Verificar si tiene artículos
+        if (await _repository.HasArticlesAsync(id))
+            throw new CategoryHasArticlesException();
         await _repository.DeleteAsync(id);
     }
 

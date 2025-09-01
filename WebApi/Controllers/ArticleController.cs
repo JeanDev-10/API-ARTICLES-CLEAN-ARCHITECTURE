@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Articles.Application.DTOs.Article;
 using Articles.Application.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using static Articles.Domain.Exceptions.DomainException;
 
@@ -11,10 +11,14 @@ namespace WebApi.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleService _articleService;
+        private readonly IValidator<CreateArticleDto> _createValidator;
+        private readonly IValidator<UpdateArticleDto> _updateValidator;
 
-        public ArticleController(IArticleService articleService)
+        public ArticleController(IArticleService articleService, IValidator<CreateArticleDto> createValidator, IValidator<UpdateArticleDto> updateValidator)
         {
             _articleService = articleService;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAll()
@@ -49,6 +53,16 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ArticleDto>> Create([FromBody] CreateArticleDto dto)
         {
+            // Validar con FluentValidation
+            var validationResult = await _createValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+            {
+                message = "Errores de validación",
+                errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray()
+            });
+            }
             try
             {
                 var article = await _articleService.CreateAsync(dto);
@@ -57,14 +71,6 @@ namespace WebApi.Controllers
             catch (DuplicateArticleNameException ex)
             {
                 return Conflict(new { message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new
-                {
-                    message = "Errores de validación",
-                    errors = ex.Message.Split(';').Select(e => e.Trim()).ToArray()
-                });
             }
             catch (ArgumentException ex)
             {
@@ -78,6 +84,16 @@ namespace WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ArticleDto>> Update(int id, [FromBody] UpdateArticleDto dto)
         {
+             // Validar con FluentValidation
+            var validationResult = await _updateValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+            {
+                message = "Errores de validación",
+                errors = validationResult.Errors.Select(e => e.ErrorMessage).ToArray()
+            });
+            }
             try
             {
                 var article = await _articleService.UpdateAsync(id, dto);
@@ -86,14 +102,6 @@ namespace WebApi.Controllers
             catch (ArticleNotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new
-                {
-                    message = "Errores de validación",
-                    errors = ex.Message.Split(';').Select(e => e.Trim()).ToArray()
-                });
             }
             catch (DuplicateArticleNameException ex)
             {

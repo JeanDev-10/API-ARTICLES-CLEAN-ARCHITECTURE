@@ -17,7 +17,9 @@ public class ArticleRepository : IArticleRepository
     }
     public async Task<Article?> GetByIdAsync(int id)
     {
-        return await _context.Articles.FindAsync(id);
+         return await _context.Articles
+                .Include(a => a.Category)
+                .FirstOrDefaultAsync(a => a.Id == id);
     }
     public async Task<Article?> GetByNameAsync(string name)
     {
@@ -26,7 +28,7 @@ public class ArticleRepository : IArticleRepository
 
     public async Task<IEnumerable<Article>> GetAllAsync()
     {
-        return await _context.Articles.ToListAsync();
+        return await _context.Articles.Include(a=>a.Category).ToListAsync();
     }
     public async Task<Article> CreateAsync(Article article)
     {
@@ -56,5 +58,9 @@ public class ArticleRepository : IArticleRepository
     {
         var nameVo = new ArticleName(name);
         return await _context.Articles.AnyAsync(a => a.Name == nameVo && a.Id != excludeId);
+    }
+    public async Task<bool> CategoryExistsAsync(int categoryId)
+    {
+        return await _context.Categories.AnyAsync(c => c.Id == categoryId);
     }
 }

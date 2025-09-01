@@ -12,4 +12,6 @@ public interface ICategoryRepository
     Task<Category> UpdateAsync(Category category);
     Task DeleteAsync(int id);
     Task<bool> ExistsByNameAsync(string name, int excludeId = 0);
+    Task<int> GetArticleCountAsync(int categoryId);  // Contar artículos
+    Task<bool> HasArticlesAsync(int categoryId);  // Verificar si tiene artículos
 }

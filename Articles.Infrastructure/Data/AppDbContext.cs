@@ -38,14 +38,20 @@ public class AppDbContext : DbContext
                   entity.Property(e => e.UpdatedAt)
                         .IsRequired();
 
+                  entity.Property(e => e.CategoryId)
+                        .IsRequired();
                   // Índice único para el nombre
                   entity.HasIndex(e => e.Name).IsUnique();
+                  // Relación muchos a uno con Category
+                  entity.HasOne(a => a.Category)
+                        .WithMany(c => c.Articles)
+                        .HasForeignKey(a => a.CategoryId)
+                        .OnDelete(DeleteBehavior.Restrict); // Evita eliminación en cascada
             });
             // Configuración de Category
             modelBuilder.Entity<Category>(entity =>
             {
                   entity.HasKey(e => e.Id);
-
                   entity.Property(e => e.Name)
                         .IsRequired()
                         .HasConversion(CategoryConverters.NameConverter)
@@ -59,6 +65,11 @@ public class AppDbContext : DbContext
 
                   // Índice único para el nombre
                   entity.HasIndex(e => e.Name).IsUnique();
+                  // Relación uno a muchos con Articles
+                  entity.HasMany(c => c.Articles)
+                        .WithOne(a => a.Category)
+                        .HasForeignKey(a => a.CategoryId)
+                        .OnDelete(DeleteBehavior.Restrict); // Evita eliminación en cascada
             });
             base.OnModelCreating(modelBuilder);
       }
